@@ -1,0 +1,4 @@
+->      /                                                  health.Routes
+GET     /guides/disa-returns-test-support-api-service-guide           controllers.Default.redirect(to = "/guides/disa-returns-test-support-api-service-guide/")
+GET     /guides/disa-returns-test-support-api-service-guide/          controllers.Assets.at(path="/public", file="index.html")
+GET     /guides/disa-returns-test-support-api-service-guide/*file     controllers.Assets.at(path="/public", file)
