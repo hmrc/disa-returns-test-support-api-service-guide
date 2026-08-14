@@ -10,6 +10,6 @@ object AppDependencies {
   )
 
   lazy val test: Seq[ModuleID] = Seq(
-    "uk.gov.hmrc" %% "bootstrap-test-play-30"     % bootStrapPlayVersion
+    "uk.gov.hmrc" %% "bootstrap-test-play-30" % bootStrapPlayVersion
   ).map(_ % Test)
 }

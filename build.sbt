@@ -3,14 +3,14 @@ val appName = "disa-returns-test-support-api-service-guide"
 scalaVersion := "2.13.16"
 
 ThisBuild / libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
-ThisBuild / semanticdbEnabled := true
-ThisBuild / semanticdbVersion := scalafixSemanticdb.revision
+ThisBuild / semanticdbEnabled                                    := true
+ThisBuild / semanticdbVersion                                    := scalafixSemanticdb.revision
 
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin)
   .settings(
-    majorVersion := 0,
+    majorVersion                    := 0,
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
     update / evictionWarningOptions := EvictionWarningOptions.default.withWarnScalaVersionEviction(false)
   )
