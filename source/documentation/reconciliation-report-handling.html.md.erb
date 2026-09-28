@@ -16,29 +16,41 @@ When you submit a request to the ISA Returns Test Support API, it generates a te
 configurable simulated errors.
 
 The API request allows you to specify the number of occurrences for each of the following supported error types:
+- [oversubscription](#oversubscription-error-type)
+- [trace and match failures](#trace-and-match-failures)
+- [eligibility failures](#eligibility-failures)
 
-- oversubscription – indicates a situation where an investor has over-subscribed beyond the HMRC acceptable ISA
-investment limit through various banks / financial institutions
-- trace and match failures – indicates a situation where the details of an investor submitted through various banks /
-financial institutions is different compared to the details already available on the backend database
-- eligibility failures – indicates a situation where an investor is non-eligible for a specific ISA product due to
-strict criteria such as age restrictions, or nationality, or any other eligibility requirements
+### Oversubscription error type
+
+The oversubscription error type indicates a situation where an investor has over-subscribed beyond the HMRC acceptable
+ISA investment limit through various banks / financial institutions.
+
+### Trace and match failures
+
+The trace and match failure error type indicates a situation where the details of an investor submitted through various
+banks / financial institutions is different compared to the details already available on the backend database.
+
+### Eligibility failures
+
+The eligibility failure error type indicates a situation where an investor is non-eligible for a specific ISA product
+due to strict criteria such as age restrictions, or nationality, or any other eligibility requirements.
 
 The generated reconciliation report can be retrieved through a separate API call and is not included in the API response.
 
 ## Post-report generation procedures
 
 Once the reconciliation report is generated:
+
 - the report will not be returned automatically
-- a [PPNS notification](isa-returns-test-support-api-behaviour.html#notifications-handling) is triggered to the relevant subscriber to notify them that a reconciliation report is available
+- a [PPNS notification](https://docs.google.com/document/d/1I2Xftl2SHCG1OXf2i5JRmiL5EjOR23FmemkRnfedsMo/edit?tab=t.726ilgk6xnyn#bookmark=id.cssynuv5olmb)
+is triggered to the relevant subscriber to notify them that a reconciliation report is available
 
 Your application can use the ‘Get report reconciliation results’ endpoint from the ISA Returns API to retrieve and
 process the generated results. This allows you to test the complete asynchronous submission and notification flow before
 integrating with the live service.
 
-
 Based on the reconciliation report received, the consuming software applications can test for the following situations:
+
 - determine the workflow for oversubscriptions
 - identify and rectify situations where an investor’s details are incorrect
-- simulate their software application workflow to prevent ISA investments from ineligible investors where the ISA
-investment eligibility criteria are not satisfied
+- simulate their software application workflow to prevent ISA investments fr

@@ -78,9 +78,12 @@ This API has the following endpoints:
 ### Generate test reconciliation report endpoint
 
 This endpoint initiates the generation of a simulated reconciliation report with sample errors for a specific Z-reference
-user. You can specify the number of simulated errors to be included for each of the oversubscription, trace and match or
-ineligible investment scenarios. The reconciliation report is made available to the ISA Returns API, and a
-[PPNS](#notifications-handling) is triggered.
+user. You can specify the number of simulated errors to be included for each of the
+[oversubscription](reconciliation-report-handling.html#oversubscription-error-type),
+[trace and match](reconciliation-report-handling.html#trace-and-match-failures) or
+[ineligible investment](reconciliation-report-handling.html#eligibility-failures)
+scenarios. The reconciliation report is made available to the ISA Returns API, and a notificationis triggered via
+[PPNS](#notifications-handling).
 
 **Note**
 
@@ -111,8 +114,8 @@ expires, the default reporting window of the 6th to the 19th of every month auto
 
 ### Report processing
 
-Process the simulated reconciliation report within your application to identify integration issues before production
-deployment.
+Process the simulated reconciliation report within your application to identify integration issues before requesting
+access to deploy to the production environment.
 
 This includes validating:
 
@@ -133,8 +136,8 @@ workflow.
 ### Error detection and handling
 
 The ISA Returns Test Support API can simulate errors within the generated sample reconciliation reports. Use these
-scenarios to validate how your application detects, handles, and responds to different error conditions before deployment
-to production.
+scenarios to validate how your application detects, handles, and responds to different error conditions before
+requesting access to deploy to the production environment.
 
 ### Asynchronous processing and status handling
 
