@@ -1,0 +1,152 @@
+---
+title: ISA Returns Test Support API behaviour | ISA Returns Test Support API service guide
+weight: 4
+---
+
+# ISA Returns Test Support API behaviour
+
+The ISA Returns Test Support API is intended for organisations enrolled in the
+[Manage ISAs](/api-documentation/docs/api/service/disa-returns/1.0) service and is to be used
+together with the ISA Returns API to support the validation of the end-to-end processing prior to deployment to the
+production environment.
+
+It is preferred to subscribe to the ISA Returns API by provisioning a valid callback URL to notify you when the sample
+reconciliation report is available for download.
+
+##End-to-end journey
+
+The transaction lifecycle of the ISA Returns Test Support API in the sandbox environment is captured below:
+
+<img src="images/isa-returns-test-support-end-to-end-journey.png" alt="Diagram showing the full flow of the API."
+style="width:390px; max-height:364px"/>
+
+<img src="images/isa-returns-test-support-simulated-report-generation-flow.png" alt="Diagram showing the submit report generation flow."
+style="width:616px; max-height:658px"/>
+
+The whole lifecycle via ISA Returns Test Support API is as follows:
+
+- Initiate reconciliation report generation - The developer invokes the ISA Returns Test Support API to initiate the
+generation of a reconciliation report for a specific Z-Reference.
+- Simulated report generation - On receipt of the request, the ISA Returns Test Support API generates a simulated
+reconciliation report with sample data. The report contains error conditions corresponding to the different use cases.
+- Reconciliation report availability and notification - Once the sample reconciliation results are available, you will
+either be notified via
+[Push Pull Notifications Service (PPNS)](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/push-pull-notifications-api/1.0)
+using the callback URL configured while subscribing to the ISA Returns API or you can query the PPNS API directly using
+the box ID. These notifications are managed using the PPNS. For more details, refer to
+[Notifications handling](#notifications-handling).
+- Once notified of the availability of the reconciliation report, the third-party software application can subsequently
+retrieve and process the report as part of the entire workflow in conjunction with the ISA Returns API.
+
+The generated reconciliation report contains representative data and error conditions that allows the consuming
+application to verify the processing and handling of the expected reconciliation outcomes without requiring the
+corresponding scenario to occur in the live production environment.
+
+### Override the reporting window
+
+<img src="images/isa-returns-test-support-simulated-report-generation-flow.png" alt="Diagram showing the window override flow."
+style="width:930px; max-height:1013px"/>
+
+The workflow to achieve the override reporting window feature via ISA Returns Test Support API is as follows:
+
+- Initiate override reporting window request - The developer initiates an API request from a third-party application to
+ISA Returns Test Support API to override the reporting window for a specific Z-Reference. The request includes the
+required start date and end date for the monthly submission.
+- Processes the Override request - On receipt of a valid override request, the ISA Returns Test Support API overrides
+the default monthly submission reporting window and applies the requested reporting window with the specified start and
+end date.
+- While the override reporting window is processed, the reporting window is open as per the new set start and end date.
+All data or declaration submitted within this period is processed successfully and a success response is sent to the
+third-party application.
+
+**Note**
+
+This override feature lasts for one hour and once it expires, the default reporting window of the 6th to the 19th of
+every month automatically resumes.
+
+### Notifications handling
+
+ISA Returns Test Support API handles the request for a simulated reconciliation report asynchronously. Consumers of the
+ISA Returns API may wish to be informed once the reconciliation report is ready. This notification facility is achieved
+using the PPNS, which is an API platform capability to support sending notifications to API customers.
+
+## ISA Returns Test Support API endpoints
+
+This API has the following endpoints:
+
+### Generate test reconciliation report endpoint
+
+This endpoint initiates the generation of a simulated reconciliation report with sample errors for a specific Z-reference
+user. You can specify the number of simulated errors to be included for each of the
+[oversubscription](reconciliation-report-handling.html#oversubscription-error-type),
+[trace and match](reconciliation-report-handling.html#trace-and-match-failures) or
+[ineligible investment](reconciliation-report-handling.html#eligibility-failures)
+scenarios. The reconciliation report is made available to the ISA Returns API, and a notification is triggered via
+[PPNS](#notifications-handling).
+
+**Note**
+
+Each sample reconciliation report is limited to a maximum of 2,000 issues across all issue types per Z-Reference.
+Attempts to exceed this limit will result in an error.
+
+### Override the reporting window endpoint
+
+This endpoint provides the ability to configure a reporting window for the authenticated Z-Reference. The override lasts
+for one hour and once the override expires, the normal reporting-period validation resumes.
+
+## Supported test scenarios
+
+The ISA Returns Test Support API supports the following scenarios:
+
+### Sample Report Generation
+
+Use the sandbox environment to independently trigger the generation of a sample test reconciliation report. This allows
+you to verify that your application can handle the entire workflow including the reconciliation reporting without
+interacting with the production service.
+
+### Reporting window override facility
+
+Use the reporting window override feature in the sandbox environment to set a custom start and end date for the monthly
+submission reporting window. This allows you to test how the ISA Returns API behaves during the monthly returns submission.
+Reporting outside of the reporting window will result in an error. This override feature lasts for one hour and once it
+expires, the default reporting window of the 6th to the 19th of every month automatically resumes.
+
+### Report processing
+
+Process the simulated reconciliation report within your application to identify integration issues before requesting
+access to deploy to the production environment.
+
+This includes validating:
+
+- Data mapping
+- Schema compatibility
+- Field handling
+- Reconciliation report-processing logic
+
+Testing these scenarios in the sandbox helps identify schema mismatches and other processing issues before they affect
+production workflows.
+
+### PPNS handling
+
+Use the sandbox environment to test the integration with the [PPNS](#notifications-handling). This allows you to verify
+that your application can receive and process asynchronous events reliably as part of the reconciliation reporting
+workflow.
+
+### Error detection and handling
+
+The ISA Returns Test Support API can simulate errors within the generated sample reconciliation reports. Use these
+scenarios to validate how your application detects, handles, and responds to different error conditions before
+requesting access to deploy to the production environment.
+
+### Asynchronous processing and status handling
+
+Use the API to support how your application interacts with the ISA Returns API endpoints throughout the asynchronous
+report-processing lifecycle.
+
+This includes validating:
+
+
+- Asynchronous notifications
+- Report availability
+- Report retrieval
+- Application handling of processing outcomes
